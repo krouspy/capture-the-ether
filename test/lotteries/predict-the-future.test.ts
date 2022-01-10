@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import { etherToWei } from '../utils';
 
-describe('GuessNewNumber', function () {
-  it('should guess the new number', async function () {
+describe('PredictTheFuture', function () {
+  it('should guess the random answer', async function () {
     const Challenge = await ethers.getContractFactory('PredictTheFuture');
     const challenge = await Challenge.deploy({ value: etherToWei(1) });
     await challenge.deployed();
