@@ -21,7 +21,7 @@ const config: HardhatUserConfig = {
   solidity: '0.4.21',
   networks: {
     ropsten: {
-      url: `https://ropsten.infura.io/v3/${process.env.INFURA_KEY}` || '',
+      url: process.env.PROVIDER_URL || '',
       accounts:
         process.env.PRIVATE_KEY !== undefined &&
         process.env.PRIVATE_KEY_ACCOMPLICE !== undefined
