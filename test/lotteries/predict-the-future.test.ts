@@ -4,26 +4,29 @@ import { etherToWei } from '../utils';
 
 describe('PredictTheFuture', function () {
   it('should guess the random answer', async function () {
-    const challengeAddress = '0xE9d00F2aBd41F392726860559Fa1B63719c95699';
+    const challengeAddress = '0x17A2aa16d1F1F63681bb8e30FdDb71eda9280bcA';
+    const solutionAddress = '0xBb760ce72e96Ae9035e159bD6Bd3f513999a1554';
 
     const Challenge = await ethers.getContractFactory('PredictTheFuture');
     const challenge = Challenge.attach(challengeAddress);
 
+    const Solution = await ethers.getContractFactory(
+      'SolutionPredictTheFuture'
+    );
+    const solution = Solution.attach(solutionAddress);
+
     console.log('locking guess...');
     const guess = 0;
-    let tx = await challenge.lockInGuess(guess, { value: etherToWei(1) });
+    let tx = await solution.lockInGuess(guess, { value: etherToWei(1) });
     await tx.wait();
 
-    /**
-     * To complete this challenge we actually need to brute force it
-     * because to know in advance the blockhash would be practically impossible for *non-miners*
-     * and we also notice the answer is modulo 10 so there are only 10 possibilities [0, 9]
-     * At some point, the random answer will match our guess
-     */
+    // spam until challenge.isComplete() returns true
+    tx = await solution.attack({
+      gasLimit: 1000000,
+      gasPrice: 10000000000,
+    });
+    await tx.wait();
 
-    // Repeat until challenge.isComplete() returns true
-    // await challenge.settle()
-
-    // expect(await challenge.isComplete()).to.be.true;
+    expect(await challenge.isComplete()).to.be.true;
   });
 });
