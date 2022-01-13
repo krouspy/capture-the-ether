@@ -12,13 +12,12 @@ contract CaptureTheEtherNickname {
 // Challenge contract. You don't need to do anything with this; it just verifies
 // that you set a nickname for yourself.
 contract ChooseNickname {
-    CaptureTheEtherNickname cte;
+    CaptureTheEtherNickname cte = CaptureTheEtherNickname(msg.sender);
     address player;
 
     // Your address gets passed in as a constructor parameter.
-    function ChooseNickname(address _player, address cteAddress) public {
+    function ChooseNickname(address _player) public {
         player = _player;
-        cte = CaptureTheEtherNickname(cteAddress);
     }
 
     // Check that the first character is not null.
