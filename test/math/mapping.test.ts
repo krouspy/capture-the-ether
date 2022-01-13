@@ -9,9 +9,10 @@ import { ethers } from 'hardhat';
  */
 describe('Mapping', function () {
   it('should override isComplete variable', async function () {
+    const challengeAddress = '0xE1cB34Ab17D306467b6aef6EFAFc3fe39E6E2f0F';
+
     const Challenge = await ethers.getContractFactory('Mapping');
-    const challenge = await Challenge.deploy();
-    await challenge.deployed();
+    const challenge = Challenge.attach(challengeAddress);
 
     let tx = await challenge.set(0, 1);
     await tx.wait();
@@ -36,7 +37,10 @@ describe('Mapping', function () {
     const value = ethers.utils.hexZeroPad(ethers.utils.hexlify(1), 32);
 
     // override isComplete
-    tx = await challenge.set(index_hex, value);
+    tx = await challenge.set(index_hex, value, {
+      gasLimit: 1000000,
+      gasPrice: 100000000000,
+    });
     await tx.wait();
 
     expect(await challenge.isComplete()).to.be.true;

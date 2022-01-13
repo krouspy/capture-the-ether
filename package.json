@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "compile": "hardhat compile",
-    "test": "hardhat test",
+    "test:hardhat": "hardhat test",
+    "test:ropsten": "hardhat test --network ropsten",
     "deploy": "hardhat run scripts/deploy.ts --network localhost",
     "chain": "hardhat node"
   },

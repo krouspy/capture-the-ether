@@ -3,10 +3,11 @@ import { ethers } from 'hardhat';
 import { etherToWei } from '../utils';
 
 describe('GuessRandomNumber', function () {
-  it(`should guess the secret number`, async function () {
+  it(`should guess the random number`, async function () {
+    const challengeAddress = '0x1C89e3F2814505273BF6002419B055c30529F9B3';
+
     const Challenge = await ethers.getContractFactory('GuessRandomNumber');
-    const challenge = await Challenge.deploy({ value: etherToWei(1) });
-    await challenge.deployed();
+    const challenge = Challenge.attach(challengeAddress);
 
     const answer = Number(
       await challenge.provider.getStorageAt(challenge.address, 0)

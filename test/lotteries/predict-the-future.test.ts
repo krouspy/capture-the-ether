@@ -4,14 +4,15 @@ import { etherToWei } from '../utils';
 
 describe('PredictTheFuture', function () {
   it('should guess the random answer', async function () {
-    const Challenge = await ethers.getContractFactory('PredictTheFuture');
-    const challenge = await Challenge.deploy({ value: etherToWei(1) });
-    await challenge.deployed();
+    const challengeAddress = '0xE9d00F2aBd41F392726860559Fa1B63719c95699';
 
-    const lockInGuessTx = await challenge.lockInGuess(0, {
-      value: etherToWei(1),
-    });
-    await lockInGuessTx.wait();
+    const Challenge = await ethers.getContractFactory('PredictTheFuture');
+    const challenge = Challenge.attach(challengeAddress);
+
+    console.log('locking guess...');
+    const guess = 0;
+    let tx = await challenge.lockInGuess(guess, { value: etherToWei(1) });
+    await tx.wait();
 
     /**
      * To complete this challenge we actually need to brute force it

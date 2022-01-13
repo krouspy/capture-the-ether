@@ -1,30 +1,23 @@
 import { expect } from 'chai';
 import { ethers } from 'hardhat';
 
-const nickname = 'my_nickname';
+const nickname = 'krouspy';
 
 describe('ChooseNickname', function () {
   it(`should set nickname to ${nickname}`, async function () {
-    const [deployer] = await ethers.getSigners();
+    const ctfAddress = '0x71c46Ed333C35e4E6c62D32dc7C8F00D125b4fee';
+    const challengeAddress = '0x1435adbd1caC2f9122438550Dd0A14a9E4f6a320';
 
-    const Challenge = await ethers.getContractFactory(
-      'CaptureTheEtherNickname'
-    );
-    const ChooseNickname = await ethers.getContractFactory('ChooseNickname');
+    const CTF = await ethers.getContractFactory('CaptureTheEtherNickname');
+    const ctf = CTF.attach(ctfAddress);
 
-    const challenge = await Challenge.deploy();
-    const chooseNickname = await ChooseNickname.deploy(
-      deployer.address,
-      challenge.address
-    );
-
-    await challenge.deployed();
-    await chooseNickname.deployed();
+    const Challenge = await ethers.getContractFactory('ChooseNickname');
+    const challenge = Challenge.attach(challengeAddress);
 
     const param = ethers.utils.formatBytes32String(nickname);
-    const tx = await challenge.setNickname(param);
+    const tx = await ctf.setNickname(param);
     await tx.wait();
 
-    expect(await chooseNickname.isComplete()).to.be.true;
+    expect(await challenge.isComplete()).to.be.true;
   });
 });

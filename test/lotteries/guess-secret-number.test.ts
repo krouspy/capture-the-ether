@@ -22,9 +22,10 @@ function guessSecretNumber() {
 
 describe('GuessSecretNumber', function () {
   it(`should guess the secret number is ${answer}`, async function () {
+    const challengeAddress = '0x1fCdb13102C2269076FE02b746E9622517177a85';
+
     const Challenge = await ethers.getContractFactory('GuessSecretNumber');
-    const challenge = await Challenge.deploy({ value: etherToWei(1) });
-    await challenge.deployed();
+    const challenge = Challenge.attach(challengeAddress);
 
     const secretNumber = guessSecretNumber();
 
